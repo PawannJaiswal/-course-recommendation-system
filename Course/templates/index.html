@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Perfect Course</title>
+    <img src="{{ url_for('static', filename='pj-course-icon.png') }}" alt="PJ Course Icon" class="pj-course-icon">
+
+    <style>
+        /* General Body and Container Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Sticky Header Styles */
+        .header {
+            position: sticky;
+            top: 0;
+            background: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            border-bottom: 2px solid #0056b3;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        /* Form Styles */
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            color: #343a40;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        select {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #ffffff;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        /* Recommendations Styles */
+        #recommendations {
+            margin-top: 20px;
+        }
+
+        #recommendations ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #recommendations li {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .course-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .course-details {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .course-details strong {
+            color: #333;
+        }
+
+        /* PJ Course Icon Styles */
+        .pj-course-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 60px;
+            height: 60px;
+            background: url('pj-course-icon.png') no-repeat center center;
+            background-size: contain;
+        }
+
+        /* Suggestions Box Styles */
+        .suggestions {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #ffffff;
+            position: absolute;
+            width: calc(100% - 20px);
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-item {
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background: #f8f9fa;
+        }
+
+        /* Loading Indicator Styles */
+        .loading {
+            font-style: italic;
+            color: #adb5bd;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Logout Button Styles */
+        .logout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Find Your Perfect Course</h1>
+        </div>
+        <div class="pj-course-icon"></div> <!-- PJ course icon -->
+
+        <!-- Logout Button -->
+        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+
+        <form id="recommendation-form">
+            <label for="course_title">Enter Course Title:</label>
+            <input type="text" id="course_title" name="course_title" autocomplete="off">
+            <div id="suggestions" class="suggestions"></div> <!-- Suggestions box -->
+
+            <label for="difficulty">Select Difficulty Level:</label>
+            <select id="difficulty" name="difficulty">
+                <option value="All">All Levels</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+                <option value="Mixed">Mixed</option>
+            </select>
+
+            <button type="submit">Get Recommendations</button>
+        </form>
+
+        <div id="recommendations">
+            <!-- Recommendations will be displayed here -->
+        </div>
+    </div>
+<p><a href="{{ url_for('feedback') }}">Leave Feedback</a></p>
+
+    <script>
+        const courseTitleInput = document.getElementById('course_title');
+        const suggestionsBox = document.getElementById('suggestions');
+        const recommendationsDiv = document.getElementById('recommendations');
+
+        courseTitleInput.addEventListener('input', function() {
+            const query = courseTitleInput.value;
+            if (query.length < 2) {
+                suggestionsBox.innerHTML = '';
+                return;
+            }
+
+            suggestionsBox.innerHTML = '<div class="loading">Loading...</div>'; // Show loading indicator
+
+            fetch(`/search_courses?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsBox.innerHTML = '';
+                    if (data.suggestions.length === 0) {
+                        suggestionsBox.innerHTML = '<div>No suggestions found.</div>';
+                        return;
+                    }
+                    data.suggestions.forEach(course => {
+                        const div = document.createElement('div');
+                        div.textContent = course.course_title;
+                        div.className = 'suggestion-item';
+                        div.addEventListener('click', () => {
+                            courseTitleInput.value = course.course_title;
+                            suggestionsBox.innerHTML = '';
+                        });
+                        suggestionsBox.appendChild(div);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching suggestions:', error);
+                    suggestionsBox.innerHTML = '<div>Error fetching suggestions. Please try again later.</div>';
+                });
+        });
+
+        document.getElementById('recommendation-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const courseTitle = document.getElementById('course_title').value;
+            const difficulty = document.getElementById('difficulty').value;
+
+            if (!courseTitle.trim()) {
+                recommendationsDiv.innerHTML = '<p>Please enter a course title.</p>';
+                return;
+            }
+
+            recommendationsDiv.innerHTML = '<div class="loading">Loading recommendations...</div>'; // Show loading indicator
+
+            fetch(`/recommend?course_title=${encodeURIComponent(courseTitle)}&difficulty=${difficulty}`)
+                .then(response => response.json())
+                .then(data => {
+                    recommendationsDiv.innerHTML = '';
+
+                    if (data.recommendations.length === 0) {
+                        recommendationsDiv.innerHTML = '<p>No recommendations found.</p>';
+                        return;
+                    }
+
+                    const ul = document.createElement('ul');
+                    data.recommendations.forEach(course => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div class="course-title">${course.course_title}</div>
+                            <div class="course-details">
+                                <p><strong>Organization:</strong> ${course.course_organization}</p>
+                                <p><strong>Certificate Type:</strong> ${course.course_Certificate_type}</p>
+                                <p><strong>Rating:</strong> ${course.course_rating}</p>
+                                <p><strong>Difficulty:</strong> ${course.course_difficulty}</p>
+                                <p><strong>Students Enrolled:</strong> ${course.course_students_enrolled}</p>
+                            </div>
+                        `;
+                        ul.appendChild(li);
+                    });
+                    recommendationsDiv.appendChild(ul);
+                })
+                .catch(error => {
+                    console.error('Error fetching recommendations:', error);
+                    recommendationsDiv.innerHTML = '<p>Error fetching recommendations. Please try again later.</p>';
+                });
+        });
+    </script>
+</body>
+</html>

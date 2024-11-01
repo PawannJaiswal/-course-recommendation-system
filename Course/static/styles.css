@@ -1,0 +1,156 @@
+/* General Body and Container Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9; /* Lighter background for a softer look */
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Slightly softer shadow */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Sticky Header Styles */
+.header {
+    position: sticky;
+    top: 0;
+    background: #007bff; /* Blue background for the header */
+    color: #ffffff;
+    padding: 20px;
+    border-bottom: 2px solid #0056b3; /* Darker blue border */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
+}
+
+.header h1 {
+    text-align: center;
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+/* Form Styles */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin: 12px 0 6px;
+    color: #343a40;
+    font-weight: 500;
+}
+
+input[type="text"],
+select {
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #ffffff;
+}
+
+button {
+    padding: 12px 24px;
+    background-color: #28a745; /* Green button for better contrast */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: scale(1.05);
+}
+
+/* Recommendations Styles */
+#recommendations {
+    margin-top: 20px;
+}
+
+#recommendations ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#recommendations li {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #ffffff; /* White background for list items */
+    border: 1px solid #e0e0e0; /* Light gray border */
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for list items */
+}
+
+.course-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #343a40;
+    margin-bottom: 8px;
+}
+
+.course-details {
+    font-size: 15px;
+    color: #6c757d;
+}
+
+.course-details strong {
+    color: #343a40;
+}
+
+/* PJ Course Icon Styles */
+.pj-course-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 60px;
+    height: 60px;
+    background: url('pj-course-icon.png') no-repeat center center;
+    background-size: contain;
+}
+
+/* Suggestions Box Styles */
+.suggestions {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    max-height: 200px; /* Increased height for better visibility */
+    overflow-y: auto;
+    background: #ffffff;
+    position: absolute;
+    width: calc(100% - 20px);
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Shadow for suggestions box */
+}
+
+.suggestion-item {
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.suggestion-item:hover {
+    background: #f8f9fa; /* Slightly darker gray on hover */
+}
+
+/* Loading Indicator Styles */
+.loading {
+    font-style: italic;
+    color: #adb5bd;
+    text-align: center;
+    font-size: 16px;
+}
+
+
